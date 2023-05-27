@@ -48,28 +48,29 @@ client.on('message', async (message) => {
             if (message.type == 'buttons_response') {
                 const { selectedButtonId: buttonid } = message;
                 if (buttonid == 'mp3' && !data == '') {
-                    client.sendMessage(chatId, '[⏳] Loading..');
+                    client.sendMessage(chatId, '[⏳] Carregando..');
                     try {
                         ytdl(data, { filter: 'audioonly', format: 'mp3', quality: 'highest' }).pipe(fs.createWriteStream(`./database/download.mp3`)).on('finish', async () => {
                             const media = await MessageMedia.fromFilePath("./database/download.mp3");
                             media.filename = `${config.filename.mp3}.mp3`;
                             await client.sendMessage(chatId, media, { sendMediaAsDocument: true });
-                            client.sendMessage(chatId, '*[✅]* Successfully!');
+                            client.sendMessage(chatId, '*[✅]* Successo!');
                         });
                     } catch {
-                        client.sendMessage(chatId, '*[❎]* Failed!')
+                        client.sendMessage(chatId, '*[❎]* Falha!')
                     }
                 } else if (buttonid == 'mp4' && !data == '') {
-                    client.sendMessage(chatId, '[⏳] Loading..');
+                    client.sendMessage(chatId, '[⏳] Carregando..');
                     try {
-                        ytdl(data, { filter: 'audioandvideo', format: 'mp4', quality: 'highest' }).pipe(fs.createWriteStream(`./database/download.mp4`)).on('finish', async () => {
+                        ytdl(data, { filter: 'audioandvideo', format: 'mp4', quality: '135' }).pipe(fs.createWriteStream(`./database/download.mp4`)).on('finish', async () => {
                             const media = MessageMedia.fromFilePath("./database/download.mp4");
                             media.filename = `${config.filename.mp4}.mp4`;
                             await client.sendMessage(chatId, media, { sendMediaAsDocument: true });
-                            client.sendMessage(chatId, '*[✅]* Successfully!');
+                            client.sendMessage(chatId, '*[✅]* Successo!');
+                            fs.unlink("./database/download.mp4");
                         });
                     } catch {
-                        client.sendMessage(chatId, '*[❎]* Failed!');
+                        client.sendMessage(chatId, '*[❎]* Falha!');
                     }
                 }
             }
